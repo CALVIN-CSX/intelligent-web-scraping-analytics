@@ -1,0 +1,64 @@
+
+.dashboard {
+  max-width: 1200px;
+  min-height: 100vh;
+  color: #172033;
+}
+
+.brand-icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: #e8efff;
+  color: #315fce;
+  font-size: 1.5rem;
+}
+
+.search-panel {
+  border: 1px solid #e4e8f0;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #ffffff, #f6f8ff);
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #315fce;
+}
+
+.stat-card,
+.result-card,
+.empty-state {
+  border: 1px solid #e4e8f0;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.result-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: #596579;
+  line-height: 1.7;
+}
+
+.result-card a {
+  color: #315fce;
+  text-decoration: none;
+}
+
+.result-card a:hover {
+  text-decoration: underline;
+}
+
+.empty-state {
+  border-style: dashed;
+}
