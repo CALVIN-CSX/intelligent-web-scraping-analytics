@@ -170,9 +170,32 @@ function App() {
             <h3 className="h5">{item.title ?? item.name ?? 'Untitled result'}</h3>
 
             <p className="result-text mb-3">
-              {item.text ??
-                (item.data ? JSON.stringify(item.data, null, 2) : 'No text available.')}
+              {item.excerpt ??
+                item.text ??
+                (item.data
+                  ? JSON.stringify(item.data, null, 2)
+                  : 'No text available.')}
             </p>
+
+            {item.keywords?.length > 0 && (
+              <div className="mb-3">
+                <strong>Keywords: </strong>
+                {item.keywords.map((keyword) => (
+                  <span
+                    className="badge text-bg-secondary me-1"
+                    key={keyword}
+                  >
+                    {keyword}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {typeof item.word_count === 'number' && (
+              <p className="text-secondary small">
+                Word count: {item.word_count}
+              </p>
+            )}
 
             {item.url && (
               <a href={item.url} target="_blank" rel="noreferrer">
