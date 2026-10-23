@@ -2,7 +2,7 @@
 import requests
 
 
-def search_wikipedia(query: str):
+def search_wikipedia(query: str, limit: int = 20):
     URL = "https://en.wikipedia.org/w/api.php"
 
     HEADERS = {
@@ -19,6 +19,7 @@ def search_wikipedia(query: str):
         "format": "json",
         "list": "search",
         "srsearch": query,
+        "srlimit": limit,
     }
 
     response = requests.get(
@@ -27,6 +28,7 @@ def search_wikipedia(query: str):
         headers=HEADERS,
         timeout=15,
     )
+
     response.raise_for_status()
     data = response.json()
 
@@ -65,6 +67,7 @@ def search_wikipedia(query: str):
         headers=HEADERS,
         timeout=15,
     )
+
     response.raise_for_status()
     tdata = response.json()
 
