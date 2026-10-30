@@ -7,6 +7,7 @@ const API_URL = 'http://127.0.0.1:8000'
 function App() {
   const [query, setQuery] = useState('')
   const [source, setSource] = useState('wikipedia')
+  const [limit, setLimit] = useState('20')
   const [results, setResults] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -25,7 +26,7 @@ function App() {
 
     try {
       const response = await fetch(
-        `${API_URL}/search?query=${encodeURIComponent(query)}&source=${encodeURIComponent(source)}`
+        `${API_URL}/search?query=${encodeURIComponent(query)}&source=${encodeURIComponent(source)}&limit=${limit}`
       )
 
       if (!response.ok) {
@@ -35,12 +36,14 @@ function App() {
       const data = await response.json()
 
       setResults(data.results ?? [])
+
     } catch (err) {
       setError(
         'Could not retrieve results. Check that your backend is running and the endpoint exists.'
       )
 
       console.error(err)
+
     } finally {
       setLoading(false)
     }
@@ -52,6 +55,7 @@ function App() {
       {/* Header */}
 
       <header className="d-flex align-items-center gap-3 mb-5">
+
         <div className="brand-icon">
           <i className="bi bi-radar" />
         </div>
@@ -65,6 +69,7 @@ function App() {
             Research, collect, and analyze information
           </p>
         </div>
+
       </header>
 
       {/* Search Section */}
@@ -125,6 +130,26 @@ function App() {
 
             </div>
 
+            {/* Article Limit */}
+
+            <div className="col-12 col-md-2">
+
+              <select
+                className="form-select form-select-lg"
+                value={limit}
+                onChange={(event) => setLimit(event.target.value)}
+                aria-label="Select number of results"
+              >
+
+                <option value="10">10 articles</option>
+                <option value="20">20 articles</option>
+                <option value="30">30 articles</option>
+                <option value="50">50 articles</option>
+
+              </select>
+
+            </div>
+
             {/* Search Button */}
 
             <div className="col-12 col-md-auto">
@@ -177,9 +202,7 @@ function App() {
 
             <div className="stat-value text-capitalize">
 
-              {source === 'pokemon'
-                ? 'PokéAPI'
-                : 'Wikipedia'}
+              {source === 'pokemon' ? 'PokéAPI' : 'Wikipedia'}
 
             </div>
 
@@ -279,17 +302,13 @@ function App() {
             <div className="d-flex flex-wrap align-items-center gap-2 mb-2">
 
               <span className="badge text-bg-primary">
-
                 {item.source ?? source}
-
               </span>
 
               {item.id != null && (
 
                 <span className="text-secondary small">
-
                   ID: {item.id}
-
                 </span>
 
               )}
@@ -299,9 +318,7 @@ function App() {
             {/* Title */}
 
             <h3 className="h5">
-
               {item.title ?? item.name ?? 'Untitled result'}
-
             </h3>
 
             {/* NLP Summary */}
@@ -310,39 +327,31 @@ function App() {
 
               <div className="summary-section mb-3">
 
-                <strong>
-                  Summary
-                </strong>
+                <strong>Summary</strong>
 
                 <p className="result-text mb-0 mt-2">
-
                   {item.summary}
-
                 </p>
 
               </div>
 
             )}
 
-            {/* Excerpt */}
+            {/* Article Preview */}
 
-            <div className="mb-3">
+            {item.excerpt && (
 
-              <strong>
-                Extracted Text
-              </strong>
+              <div className="mb-3">
 
-              <p className="result-text mt-2 mb-0">
+                <strong>Article Preview</strong>
 
-                {item.excerpt ??
-                  item.text ??
-                  (item.data
-                    ? JSON.stringify(item.data, null, 2)
-                    : 'No text available.')}
+                <p className="result-text mt-2 mb-0">
+                  {item.excerpt}
+                </p>
 
-              </p>
+              </div>
 
-            </div>
+            )}
 
             {/* Keywords */}
 
@@ -350,9 +359,7 @@ function App() {
 
               <div className="mb-3">
 
-                <strong>
-                  Keywords
-                </strong>
+                <strong>Keywords</strong>
 
                 <div className="mt-2">
 
@@ -362,9 +369,7 @@ function App() {
                       className="badge text-bg-secondary me-1 mb-1"
                       key={keyword}
                     >
-
                       {keyword}
-
                     </span>
 
                   ))}
@@ -380,9 +385,7 @@ function App() {
             {typeof item.word_count === 'number' && (
 
               <p className="text-secondary small mb-3">
-
                 Word count: {item.word_count}
-
               </p>
 
             )}
@@ -396,9 +399,7 @@ function App() {
                 target="_blank"
                 rel="noreferrer"
               >
-
                 View original source ↗
-
               </a>
 
             )}

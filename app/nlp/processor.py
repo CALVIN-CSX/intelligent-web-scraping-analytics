@@ -91,17 +91,22 @@ def extract_keywords(text, limit=8):
     ]
 
 
-def summarize_text(text, limit=2):
+
+def split_sentences(text):
     sentences = re.split(
         r"(?<=[.!?])\s+",
         text
     )
 
-    sentences = [
+    return [
         sentence.strip()
         for sentence in sentences
         if sentence.strip()
     ]
+
+
+def summarize_text(text, limit=2):
+    sentences = split_sentences(text)
 
     if len(sentences) <= limit:
         return " ".join(sentences)
@@ -134,6 +139,29 @@ def summarize_text(text, limit=2):
     )
 
 
+def build_excerpt(text, summary, limit=35):
+    sentences = split_sentences(text)
+
+    # Normalize summary sentences for comparison
+    summary_sentences = {
+        sentence.lower().strip()
+        for sentence in split_sentences(summary)
+    }
+
+    # Remove sentences already displayed in the summary
+    remaining_sentences = [
+        sentence
+        for sentence in sentences
+        if sentence.lower().strip() not in summary_sentences
+    ]
+
+    # Use only the remaining article content
+    preview = " ".join(remaining_sentences)
+
+    return " ".join(preview.split()[:limit])
+
+
+
 def process_text(articles):
     processed_articles = []
 
@@ -154,11 +182,12 @@ def process_text(articles):
             tokenize(text)
         )
 
-        article["excerpt"] = " ".join(
-            text.split()[:35]
-        )
-
         article["summary"] = summarize_text(text)
+
+        article["excerpt"] = build_excerpt(
+            text,
+            article["summary"]
+        )
 
         processed_articles.append(article)
 
