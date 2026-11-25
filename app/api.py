@@ -30,16 +30,13 @@ def search_endpoint(
                 detail="Limit must be between 1 and 50.",
             )
 
-        results = search(
-            query,
-            source,
+        response = search(
+            query=query,
+            source=source,
             limit=limit,
         )
 
-        return {
-            "results": results,
-            "total_results": len(results),
-        }
+        return response
 
     except ValueError as error:
         raise HTTPException(
